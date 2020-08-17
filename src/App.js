@@ -19,6 +19,7 @@ export default function App() {
       setShow(res.data)
       setSeasons(formatSeasons(res.data._embedded.episodes))
     })
+    .catch(err => err)
   }, []);
 
   const handleSelect = e => {
