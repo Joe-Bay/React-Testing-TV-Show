@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, wait, waitForElement } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from './App'
 import fetchShow from './api/fetchShow'
@@ -237,13 +237,12 @@ const showData = { data:{
 test('app fetches data and renders it', async () => {
     fetchShow.mockResolvedValueOnce(showData)
     render(<App />)
-    const dropDown = screen.findByTestId(/dropdown/i)
-    const season1 = screen.findByText(/season 1/i)
+    const dropDown = await screen.findByText(/select a season/i)
+    userEvent.click(dropDown)
+    const season1 = await screen.findByText(/season 1/i)
+    userEvent.click(season1)
 
-    waitFor(() => userEvent.click(dropDown))
-    waitFor(() => userEvent.click(season1))
-
-    waitFor(() => expect(screen.findByTestId(/dropdown/i)).toHaveValue(/season 1/i))
+     expect(await screen.findAllByTestId(/shows/i)).toHaveLength(8)
 
 
 })
